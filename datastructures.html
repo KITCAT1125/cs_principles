@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta chaset="utf-8">
+    <title>Data Structures</title>
+    <script>
+        let cat = {
+            name: "",
+            age: "5",
+            type: "Tuxedo",
+            gender: "Female",
+            weight: 8,
+        }
+
+        cat.name = "Frankie"
+
+        function dog(name){
+            this.name = name;
+            this.age = age;
+        }
+
+        class Dog{
+            constructor(name, age){
+            this.name = name;
+            this.age = age
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            }
+            bark(){
+                console.log("Woof");
+            }
+            run(){
+
+            }
+            update(){
+
+            }
+            draw(){
+                alert
+            }
+        }
+
+        let myDog = new dog("Bella", 5);
+        let yourDog = new dog("Doofus", 2)
+        console.log(myDog.name);
+        console.log(myDog.age);
+
+        class Dragon{
+            constructor(name, age){
+            this.name = name;
+            this.age = age;
+            this.pattern = pattern;
+            this.size = size;
+            }
+            armwave(){
+
+            }
+            headbob(){
+
+            }
+        }
+
+        function input(){
+            return document.getElementById("inputId").value;
+        }
+
+        function process(){
+            cat.name = input();
+            output("The cat's name is now: " + cat.name);
+        }
+
+        function output(){
+            document.getElementById("display1").innerHTML = content;
+        }
+    </script>
+</head>
+<body>
+    <input type="text" placeholder="Type " id="inputId">
+    <button type="button" onclick="process();">Input</button>
+    <p>Output:</p>
+    <p id="display1">Output will replace this...</p>
+</body>
+</html>
