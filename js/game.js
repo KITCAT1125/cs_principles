@@ -1,15 +1,19 @@
+// 
 let canvas;
 let ctx;
 
+// Defines the characteristics of the grid
 let TILESIZE = 64;
 let WIDTH = TILESIZE * 22;
 let HEIGHT = TILESIZE * 13;
 let allSprites = [];
 let walls = [];
 
+// Declares necessary variables
 let keysDown = {};
 let keysUp = {};
 
+// Defines the grid layout
 let gamePlan = `
 ......................
 ..#####........#####..
@@ -25,14 +29,17 @@ let gamePlan = `
 ..#######....#######..
 ......................`;
 
+// Announces when the key is down
 addEventListener("keydown", function(event){
     keysDown[event.key] = true;
 }, false);
 
+// Revokes the "keydown" state
 addEventListener("keyup", function(event){
     delete keysDown[event.key];
 }, false);
 
+// Creates the grid and runs the gameloop
 function init(){
     canvas = document.createElement("canvas");
     canvas.width = WIDTH;
@@ -42,6 +49,7 @@ function init(){
     gameLoop();
 }
 
+// Defines the generic "Sprite"
 class Sprite{
     constructor(x, y, w, h, color){
         this.x = x;
@@ -63,6 +71,7 @@ class Sprite{
     };
 }
 
+// Defines the generic "Player" of "Sprite" and defines the controls and movement
 class Player extends Sprite{
     constructor(x, y, speed, w, h, color, hitpoints){
         super(x, y, w, h, color);
@@ -87,17 +96,17 @@ class Player extends Sprite{
         return "player";
     }
     input(){
-        if ('s' in keysDown){
+        if ('w' in keysDown){
+            this.dy = 1
+            this.dx = 0;
+        }
+        else if ('s' in keysDown){
             this.dy = -1;
             this.dx = 0;
         }
         else if ('d' in keysDown){
             this.dx = -1;
             this.dy = 0;
-        }
-        else if ('w' in keysDown){
-            this.dy = 1
-            this.dx = 0;
         }
         else if ('a' in keysDown){
             this.dx = 1;
@@ -130,6 +139,7 @@ class Player extends Sprite{
     };
 }
 
+// Defines the generic "Wall" of "Sprite"
 class Wall extends Sprite{
     constructor(x, y, w, h, color){
         super(x, y, w, h, color);
@@ -147,11 +157,13 @@ class Wall extends Sprite{
     }
 }
 
+// Defines which characters are walls, and which are empty space
 const levelChars = {
     ".": "empty",
     "#": Wall,
 };
 
+// Creates the grid
 function makeGrid(plan, width){
     let newGrid = [];
     let newRow = [];
@@ -167,6 +179,7 @@ function makeGrid(plan, width){
     return newGrid;
 }
 
+// Defines the characteristics of a wall
 function readLevel(grid){
     let startActors = [];
     for (y in grid){
@@ -186,10 +199,13 @@ function readLevel(grid){
     return startActors;
 }
 
+// Calls readLevel on the grid
 let currentLevel = readLevel(makeGrid(gamePlan, 22))
 
+// Creates the player
 let player1 = new Player(WIDTH / 1, HEIGHT / 1, 10, 0.5 * TILESIZE, 0.5 * TILESIZE, 'rgb(0, 125, 200)', 100);
 
+// Checks for collision and resets the player's position
 function update(){
     for (i of allSprites){
         if (i.type == "wall"){
@@ -212,6 +228,7 @@ function update(){
     player1.update();
 }
 
+// Draws the grid
 function draw(){
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
     for (i of allSprites){
@@ -219,6 +236,7 @@ function draw(){
     }
 }
 
+// Repeats the update, draw functions
 let gameLoop = function(){
     update();
     draw();
