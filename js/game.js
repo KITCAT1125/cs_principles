@@ -135,7 +135,6 @@ class Player extends Sprite{
         this.vy = this.speed*this.dy;
         this.x -= this.vx;
         this.y -= this.vy;
-
     };
 }
 
