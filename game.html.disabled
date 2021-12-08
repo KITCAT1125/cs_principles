@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>game</title>
-    <!-- <script src="js/game.js"></script> -->
-    <script src="js/myGame.js"></script>
+    <script src="js/game.js"></script>
 </head>
 <body onload="init()">
     
