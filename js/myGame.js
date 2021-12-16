@@ -13,6 +13,8 @@ let HEIGHT = TILESIZE * 36;
 let allSprites = [];
 let walls = [];
 let enemies = [];
+let playerImage = new Image();
+playerImage.src = "./images/stolenship.jpg"
 
 // Declares necessary variables
 let keysDown = {};
@@ -58,6 +60,7 @@ let gamePlan =
 ###.............##..........................................####
 #######........................###........................######
 ################################################################`;
+
     // */
 /*
 `
@@ -83,6 +86,7 @@ addEventListener("keydown", function (event) {
 
 // Revokes the "keydown" state
 addEventListener("keyup", function (event) {
+    keysUp[event.key] = true;
     delete keysDown[event.key];
 }, false);
 
@@ -112,10 +116,19 @@ class Sprite {
     create(x, y, w, h, color) {
         return new Sprite(x, y, w, h, color);
     }
+    collideWith(obj) {
+        if (this.x + this.w >= obj.x &&
+            this.x <= obj.x + obj.w &&
+            this.y + this.h >= obj.y &&
+            this.y <= obj.y + obj.h
+        ) {
+            return true;
+        }
+    }
     draw() {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.w, this.h);
-    };
+    }
 }
 
 // Defines the generic "Player" of "Sprite" and defines the controls and movement
@@ -124,6 +137,10 @@ class Player extends Sprite {
         super(x, y, w, h, color);
         this.x = x;
         this.y = y;
+        this.vx = x;
+        this.vy = y;
+        this.dx == 0;
+        this.dy == 0;
         this.speed = speed;
         this.w = w;
         this.h = h;
@@ -144,19 +161,25 @@ class Player extends Sprite {
         return "player";
     }
     input() {
+        // if ('e' in keysDown) {
+        //     this.dx = 0;
+        //     this.dy = 0;
+        // }
         if ('w' in keysDown) {
-            this.dy = 1
-            this.dx = 0;
-        } else if ('s' in keysDown) {
-            this.dy = -1;
-            this.dx = 0;
-        } else if ('d' in keysDown) {
-            this.dx = -1;
-            this.dy = 0;
-        } else if ('a' in keysDown) {
-            this.dx = 1;
-            this.dy = 0;
-        } else {
+            this.dy == -0.01;
+            // this.dx = 0;
+        }
+        else if ('a' in keysDown) {
+            this.dx == 0.01;
+        }
+        else if ('s' in keysDown) {
+            this.dy == 0.01;
+            // this.dx = 0;
+        }
+        else if ('d' in keysDown) {
+            this.dx == -0.01;
+        }
+        else {
             this.dx = 0;
             this.dy = 0;
         }
@@ -179,10 +202,16 @@ class Player extends Sprite {
         if (this.y <= 0) {
             this.y = 0;
         }
-        this.vx = this.speed * this.dx;
-        this.vy = this.speed * this.dy;
-        this.x -= this.vx;
-        this.y -= this.vy;
+        let speedx = 0;
+        this.vx += this.dx;
+        console.log(this.vx);
+        // this.vx = this.dx
+        let speedy = 0;
+        this.vy += this.dy;
+        console.log(this.vy);
+        // this.vy = this.dy
+        this.x = this.vx;
+        this.y = this.vy;
     };
 }
 
@@ -261,7 +290,7 @@ function readLevel(grid) {
                     startActors.push(type);
                 } else {
                     let t = new type;
-                    startActors.push(t.create(x * TILESIZE, y * TILESIZE, TILESIZE, TILESIZE, 'grey'))
+                    startActors.push(t.create(x * TILESIZE, y * TILESIZE, TILESIZE, TILESIZE, 'darkgrey'))
                 }
             }
         }
@@ -271,11 +300,11 @@ function readLevel(grid) {
 
 // Calls readLevel on the grid
 let currentLevel = readLevel(makeGrid(gamePlan, 64))
-console.log("here's the current level " + currentLevel)
+// console.log("here's the current level " + currentLevel)
 
 // Creates the player
-let player1 = new Player(WIDTH / 4, HEIGHT / 4, 10, 0.5 * TILESIZE, 0.5 * TILESIZE, 'rgb(0, 125, 200)', 100);
-
+let player1 = new Player(WIDTH / 2, HEIGHT / 2, 1, 0.5 * TILESIZE, 0.5 * TILESIZE, 'rgb(0, 125, 200)', 100);
+// let player2 = new Ship(WIDTH / 2, HEIGHT / 2);
 // Checks for collision and resets the player's position
 function update() {
     for (i of allSprites) {
@@ -310,6 +339,7 @@ function draw() {
 // Repeats the update, draw functions
 let gameLoop = function () {
     update();
+    player1.input()
     draw();
     for (e of enemies) {
         e.update();
